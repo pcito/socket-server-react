@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>MiniChat</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+</head>
+<body class="container">
+    <h1 class="mt-5">
+        MiniChat
+    </h1>
+
+    <hr/>
+    <form id="miFormulario">
+        <div class="row">
+            <div class="col-8">
+                <input text="text" id="txtMensaje" placeholder="Mensaje" class="form-control"> 
+            </div>
+    
+            <div class="col-4">
+                <button class="btn btn-primary" type="submit"> Enviar</button>
+            </div>
+        </div>
+    </form>
+    
+
+    <div class="row">
+        <div class="col">
+            <ul id="misMensajes" class="mt-2">
+               
+            </ul>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js" integrity="sha512-WL6WGKMPBiM9PnHRYIn5YEtq0Z8XP4fkVb4qy7PP4vhmYQErJ/dySyXuFIMDf1eEYCXCrQrMJfkNwKc9gsjTjA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        const socket = io("https://luispc-server.herokuapp.com");
+        // Referencias a los elementos del DOM
+        const formulario = document.querySelector("#miFormulario");
+        const mensajes = document.querySelector("#misMensajes");
+        const txtMsg = document.querySelector("#txtMensaje");
+
+        formulario.addEventListener('submit', (e)=>{
+            e.preventDefault();
+            const newMesagge = txtMsg.value;
+
+            socket.emit('msg-cliente',{
+                texto: newMesagge
+            }); 
+        });
+
+        socket.on('mensaje-from-server', (data) => {
+            mensajes.innerHTML += "<li>" + data.txt + "</li>";
+            //alert(data.fecha);
+        });
+
+        
+
+        
+    </script>
+</body>
+</html>
